@@ -1,6 +1,6 @@
 """
 If you follow the rules below, your models will be loaded automatically:
-1- Your model must inherit from `escrow.db.base.Base` class.
+1- Your model must inherit from `wayne_vault.db.base.Base` class.
 2- Your model can be loaded from `root_dir/any_dir/model.py.
     Description:
         - root_dir => means root of project
@@ -8,7 +8,7 @@ If you follow the rules below, your models will be loaded automatically:
     Examples:
         Assume you have a file `user/models.py`:
         ```
-        >>> from escrow.db.base import Base
+        >>> from wayne_vault.db.base import Base
         >>> class User(Base):
         >>>    state = Column(Enum(DealState, name="deal_state"), nullable=False, default=DealState.Init)
         ```
@@ -25,8 +25,8 @@ from sqlalchemy import create_engine
 from sqlalchemy import pool
 from sqlalchemy.orm import sessionmaker, scoped_session
 
-from escrow.core.config import settings
-from escrow.db.base import Base
+from wayne_vault.core.config import settings
+from wayne_vault.db.base import Base
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -54,15 +54,16 @@ def add_models(path):
     if module_name in sys.modules:
         return
     spec = importlib.util.spec_from_file_location(module_name, str(settings.BASE_DIR / path))
+    print(spec)
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
     sys.modules[module_name] = module
 
 
 def add_all_models():
-    dirs = os.listdir(settings.BASE_DIR)
+    dirs = os.listdir(settings.BASE_DIR.joinpath("internal"))
     for d in dirs:
-        possible_model_path = d + "/models.py"
+        possible_model_path = "internal/" + d + "/models.py"
         if not os.path.isfile(possible_model_path):
             continue
         add_models(possible_model_path)
