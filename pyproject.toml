@@ -1,0 +1,28 @@
+[tool.poetry]
+name = "wayne-vault"
+version = "0.1.0"
+description = "Wayne Vault Finance Service"
+authors = ["Your Name <you@example.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+fastapi = "^0.111.0"
+sqlalchemy = "^2.0.31"
+alembic = "^1.13.1"
+pydantic = "^2.7.4"
+aioredis = "^2.0.1"
+sqlalchemy-utils = "^0.41.2"
+python-decouple = "^3.8"
+mysqlclient = "^2.2.4"
+uvicorn = "^0.30.1"
+sqladmin = "^0.17.0"
+aiomysql = "^0.2.0"
+sentry-sdk = "^2.6.0"
+pydantic-settings = "^2.3.3"
+ulid-py = "^1.1.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
