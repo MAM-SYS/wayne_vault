@@ -1,7 +1,7 @@
 from datetime import datetime
 
 import ulid
-from sqlalchemy import String, func, text
+from sqlalchemy import String, func
 from sqlalchemy.orm import Mapped, mapped_column
 
 from wayne_vault.db.base import Base
