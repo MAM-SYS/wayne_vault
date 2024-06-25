@@ -35,5 +35,4 @@ alembic-init: ## Initialize Alembic in the project
 	$(POETRY) run alembic init alembic
 
 create-migration: ## Create a new Alembic migration
-	@read -p "Enter migration message: " MESSAGE; \
-	$(ALEMBIC) revision --autogenerate -m "$$MESSAGE"
+	$(ALEMBIC) revision --autogenerate -m $(MESSAGE)

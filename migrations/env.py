@@ -1,3 +1,4 @@
+
 """
 If you follow the rules below, your models will be loaded automatically:
 1- Your model must inherit from `wayne_vault.db.base.Base` class.
@@ -14,11 +15,14 @@ If you follow the rules below, your models will be loaded automatically:
         ```
         This User model will be automatically loaded in alembic.
 """
+import logging
 import importlib
 import importlib.util
 import os
 import sys
+import types
 from logging.config import fileConfig
+from typing import List
 
 from alembic import context
 from sqlalchemy import create_engine
@@ -49,24 +53,37 @@ engine = create_engine(DB_URI, pool_recycle=3600)
 SessionLocal = scoped_session(sessionmaker(autocommit=False, autoflush=False, bind=engine))
 
 
-def add_models(path):
-    module_name = f"{path}.models"
-    if module_name in sys.modules:
-        return
-    spec = importlib.util.spec_from_file_location(module_name, str(settings.BASE_DIR / path))
-    print(spec)
+def find_files(base_dir: str, filename: str) -> List[str]:
+    """
+    Recursively find all files with a given filename in the base directory.
+    """
+    matches = []
+    for root, dirs, files in os.walk(base_dir):
+        if filename in files:
+            matches.append(os.path.join(root, filename))
+    return matches
+
+
+def load_module_from_path(path: str) -> types.ModuleType:
+    """
+    Load a module from a given file path.
+    """
+    module_name = os.path.splitext(os.path.basename(path))[0]
+    spec = importlib.util.spec_from_file_location(module_name, path)
     module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
     sys.modules[module_name] = module
+    spec.loader.exec_module(module)
+    return module
 
 
-def add_all_models():
-    dirs = os.listdir(settings.BASE_DIR.joinpath("internal"))
-    for d in dirs:
-        possible_model_path = "internal/" + d + "/models.py"
-        if not os.path.isfile(possible_model_path):
-            continue
-        add_models(possible_model_path)
+def load_models(base_dir: str):
+    """
+    Find all models.py files in the base directory and load them.
+    """
+    models_files = find_files(base_dir, 'models.py')
+    for file_path in models_files:
+        logging.info(f"Loading module from {file_path}")
+        load_module_from_path(file_path)
 
 
 def run_migrations_offline():
@@ -121,7 +138,7 @@ def run_migrations_online():
             context.run_migrations()
 
 
-add_all_models()
+load_models("..")
 target_metadata = Base.metadata
 
 if context.is_offline_mode():
