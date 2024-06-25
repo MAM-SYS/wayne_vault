@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from internal.wallets import logic
-from internal.domain_models.wallets import WalletCreateResponse
+from internal.backpack import WalletCreateResponse
 from internal.wallets.models import Wallet
 from wayne_vault.db.session import get_session
 

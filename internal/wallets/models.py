@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Optional
 
 import ulid
 from sqlalchemy import String, func
@@ -15,6 +16,7 @@ class Wallet(Base):
     blocked_amount: Mapped[int] = mapped_column(nullable=False, default=0)
     created_at: Mapped[datetime] = mapped_column(nullable=False, server_default=func.CURRENT_TIMESTAMP())
     updated_at: Mapped[datetime] = mapped_column(nullable=True, server_onupdate=func.CURRENT_TIMESTAMP())
+    deleted_at: Mapped[Optional[datetime]] = mapped_column()
 
     def __repr__(self):
         return f"<Wallet {self.id}>"
