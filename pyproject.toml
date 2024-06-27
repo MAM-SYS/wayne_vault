@@ -21,6 +21,7 @@ aiomysql = "^0.2.0"
 sentry-sdk = "^2.6.0"
 pydantic-settings = "^2.3.3"
 ulid-py = "^1.1.0"
+granian = "^1.4.4"
 
 
 [build-system]
