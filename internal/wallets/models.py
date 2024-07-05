@@ -15,8 +15,8 @@ class Wallet(Base):
 
     id: Mapped[str] = mapped_column(String(26), primary_key=True, default=ulid_gen)
     type: Mapped[WalletType] = mapped_column(ENUM(WalletType, name="wallet_type"), default=WalletType.Business)
-    available_amount: Mapped[int] = mapped_column(nullable=False, default=0)
-    blocked_amount: Mapped[int] = mapped_column(nullable=False, default=0)
+    # available_amount: Mapped[int] = mapped_column(nullable=False, default=0)
+    # blocked_amount: Mapped[int] = mapped_column(nullable=False, default=0)
 
     created_at: Mapped[datetime] = mapped_column(nullable=False, server_default=func.CURRENT_TIMESTAMP())
     updated_at: Mapped[Optional[datetime]] = mapped_column(server_onupdate=func.CURRENT_TIMESTAMP())

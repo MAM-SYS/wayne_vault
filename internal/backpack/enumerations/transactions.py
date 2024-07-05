@@ -2,6 +2,8 @@ from enum import Enum
 
 
 class TransactionType(Enum):
+    CashIn = "cash_in"
+    CashOut = "cash_out"
     Payment = "payment"
     PaymentRefund = "payment_refund"
     Commission = "commission"

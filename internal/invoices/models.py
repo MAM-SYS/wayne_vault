@@ -15,7 +15,7 @@ class Invoice(Base):
 
     id: Mapped[str] = mapped_column(String(26), primary_key=True, default=ulid_gen)
 
-    items: Mapped[Optional[List["InvoiceItem"]]] = relationship(back_populates="invoice")
+    transactions: Mapped[Optional[List["Transaction"]]] = relationship(back_populates="invoice")
 
     created_at: Mapped[datetime] = mapped_column(server_default=func.CURRENT_TIMESTAMP())
     updated_at: Mapped[Optional[datetime]] = mapped_column(server_onupdate=func.CURRENT_TIMESTAMP())
@@ -25,17 +25,17 @@ class Invoice(Base):
         return f"<Invoice {self.id}>"
 
 
-class InvoiceItem(Base):
-    __tablename__ = 'invoice_items'
-
-    id: Mapped[str] = mapped_column(String(26), primary_key=True, default=ulid_gen)
-
-    invoice_id: Mapped[str] = mapped_column(ForeignKey("invoices.id"))
-    invoice: Mapped["Invoice"] = relationship(back_populates="items")
-
-    transaction_id: Mapped[str] = mapped_column(ForeignKey("transactions.id"))
-    transaction: Mapped["Transaction"] = relationship(back_populates="invoice_item", single_parent=True)
-
-    def __repr__(self):
-        return f"<InvoiceItem {self.id}>"
-
+# class InvoiceItem(Base):
+#     __tablename__ = 'invoice_items'
+#
+#     id: Mapped[str] = mapped_column(String(26), primary_key=True, default=ulid_gen)
+#
+#     invoice_id: Mapped[str] = mapped_column(ForeignKey("invoices.id"))
+#     invoice: Mapped["Invoice"] = relationship(back_populates="items")
+#
+#     transaction_id: Mapped[str] = mapped_column(ForeignKey("transactions.id"))
+#     transaction: Mapped["Transaction"] = relationship(back_populates="invoice_item", single_parent=True)
+#
+#     def __repr__(self):
+#         return f"<InvoiceItem {self.id}>"
+#

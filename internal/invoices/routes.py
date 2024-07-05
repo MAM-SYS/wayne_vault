@@ -3,7 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from internal.backpack import InvoiceCreateResponse
 from internal.invoices import logic
-from internal.invoices.models import Invoice, InvoiceItem
+from internal.invoices.models import Invoice
 from wayne_vault.db.session import get_session
 
 router = APIRouter(prefix="/invoices")
