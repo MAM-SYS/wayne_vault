@@ -1,8 +1,13 @@
-from sqlalchemy import select
+from fastapi import HTTPException
+from sqlalchemy import select, update, func
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from dev_tools import tracer
+from internal.exceptions import InvoiceNotFoundException, WalletNotFoundException
 from internal.invoices.models import Invoice
+from internal.backpack import TransactionCreateRequest, TransactionStatus
+from internal.transactions.models import Transaction
+from internal.wallets.models import Wallet
 
 
 async def create_invoice(session: AsyncSession) -> Invoice:
@@ -12,7 +17,26 @@ async def create_invoice(session: AsyncSession) -> Invoice:
     return invoice
 
 
-@tracer
-async def add_transaction_to_invoice(invoice_id: str, session: AsyncSession) -> Invoice:
-    invoice: Invoice = await session.scalar(select(Invoice).where(Invoice.id == invoice_id))
-    print("founded invoice: ", invoice)
+# @tracer
+async def add_transaction_to_invoice(invoice_id: str, transaction_payload: TransactionCreateRequest, session: AsyncSession) -> Transaction:
+    if not (await session.scalar(select(func.count("*")).select_from(Invoice).where(Invoice.id == invoice_id))):
+        raise InvoiceNotFoundException()
+
+    if not (await session.scalar(select(func.count("*")).select_from(Wallet).where(Wallet.id == transaction_payload.source_id))):
+        raise WalletNotFoundException(wallet_id=transaction_payload.source_id)
+
+    if not (await session.scalar(select(func.count("*")).select_from(Wallet).where(Wallet.id == transaction_payload.target_id))):
+        raise WalletNotFoundException(wallet_id=transaction_payload.target_id)
+
+    transaction: Transaction = Transaction(
+        type=transaction_payload.type,
+        status=TransactionStatus.Scheduled if transaction_payload.schedule else TransactionStatus.Applied,
+        amount=transaction_payload.amount,
+        source_id=transaction_payload.source_id,
+        target_id=transaction_payload.target_id,
+        invoice_id=invoice_id
+    )
+    session.add(transaction)
+    await session.flush()
+
+    return transaction

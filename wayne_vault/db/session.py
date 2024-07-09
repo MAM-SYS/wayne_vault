@@ -22,6 +22,7 @@ async def get_session() -> AsyncGenerator[AsyncSession, None]:
         logging.error("Rolling back session %d because of %s", id(session), e)
         capture_exception(e)
         await rollback_session(session)
+        raise
 
     finally:
         await finalize_session(session)
@@ -47,7 +48,6 @@ async def finalize_session(session: AsyncSession):
         logging.error("Error while committing session: %s", e)
         capture_exception(e)
         await session.rollback()
-        raise
 
     finally:
         logging.debug("Closing session %d", id(session))

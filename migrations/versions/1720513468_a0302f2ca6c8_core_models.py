@@ -1,8 +1,8 @@
 """core-models
 
-Revision ID: 446a348b7693
+Revision ID: a0302f2ca6c8
 Revises: 
-Create Date: 2024-07-05 13:29:04.741944
+Create Date: 2024-07-09 11:54:28.689463
 
 """
 from alembic import op
@@ -11,7 +11,7 @@ import sqlalchemy_utils
 from sqlalchemy.dialects import mysql
 
 # revision identifiers, used by Alembic.
-revision = '446a348b7693'
+revision = 'a0302f2ca6c8'
 down_revision = None
 branch_labels = None
 depends_on = None

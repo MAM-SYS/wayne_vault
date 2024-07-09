@@ -32,7 +32,7 @@ class Transaction(Base):
     receipt: Mapped[Optional["Receipt"]] = relationship(back_populates="transaction", single_parent=True)
 
     invoice_id: Mapped[str] = mapped_column(ForeignKey("invoices.id"))
-    invoice: Mapped[Optional["Invoice"]] = relationship(back_populates="transactions")
+    invoice: Mapped["Invoice"] = relationship(back_populates="transactions")
 
     created_at: Mapped[datetime] = mapped_column(server_default=func.CURRENT_TIMESTAMP())
     updated_at: Mapped[Optional[datetime]] = mapped_column(server_onupdate=func.CURRENT_TIMESTAMP())
