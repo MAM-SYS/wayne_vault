@@ -15,6 +15,9 @@ class Invoice(Base):
 
     id: Mapped[str] = mapped_column(String(26), primary_key=True, default=ulid_gen)
 
+    safe_id: Mapped[Optional[str]] = mapped_column(ForeignKey("wallets.id"))
+    safe: Mapped[Optional["Wallet"]] = relationship(back_populates="invoice", single_parent=True)
+
     transactions: Mapped[Optional[List["Transaction"]]] = relationship(back_populates="invoice")
 
     created_at: Mapped[datetime] = mapped_column(server_default=func.CURRENT_TIMESTAMP())

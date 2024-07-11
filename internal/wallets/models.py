@@ -3,7 +3,7 @@ from typing import Optional
 
 from sqlalchemy import String, func
 from sqlalchemy.dialects.mysql import ENUM
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from internal.backpack import WalletType
 from wayne_vault.db.base import Base
@@ -15,8 +15,8 @@ class Wallet(Base):
 
     id: Mapped[str] = mapped_column(String(26), primary_key=True, default=ulid_gen)
     type: Mapped[WalletType] = mapped_column(ENUM(WalletType, name="wallet_type"), default=WalletType.Business)
-    # available_amount: Mapped[int] = mapped_column(nullable=False, default=0)
-    # blocked_amount: Mapped[int] = mapped_column(nullable=False, default=0)
+
+    invoice: Mapped[Optional["Invoice"]] = relationship(back_populates="safe")
 
     created_at: Mapped[datetime] = mapped_column(nullable=False, server_default=func.CURRENT_TIMESTAMP())
     updated_at: Mapped[Optional[datetime]] = mapped_column(server_onupdate=func.CURRENT_TIMESTAMP())

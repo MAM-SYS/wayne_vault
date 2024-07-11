@@ -11,5 +11,6 @@ def tracer(func):
         except Exception as e:
             logging.exception(e)
             print_exc()
+            raise e
 
     return wrapper

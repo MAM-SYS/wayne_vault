@@ -14,3 +14,9 @@ async def create_wallet(session: AsyncSession = Depends(get_session)) -> WalletC
     wallet: Wallet = await logic.create_wallet(session)
     return WalletCreateResponse(id=wallet.id)
 
+
+@router.post("/{wallet_id}", status_code=status.HTTP_200_OK)
+async def create_wallet(wallet_id: str, session: AsyncSession = Depends(get_session)) -> WalletCreateResponse:
+    wallet: Wallet = await logic.get_wallet(wallet_id, session)
+    return WalletCreateResponse(id=wallet.id)
+
