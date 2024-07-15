@@ -9,7 +9,7 @@ class TransactionType(Enum):
     Commission = "commission"
     CommissionRefund = "commission_refund"
     # SafeBlock = "safe_block"
-    # SafeUnblock = "safe_unblock"
+    SafeUnblock = "safe_unblock"
 
 
 class TransactionStatus(Enum):

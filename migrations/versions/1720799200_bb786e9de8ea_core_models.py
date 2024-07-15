@@ -1,8 +1,8 @@
 """core-models
 
-Revision ID: 4dd43a514f08
+Revision ID: bb786e9de8ea
 Revises: 
-Create Date: 2024-07-11 10:31:21.915603
+Create Date: 2024-07-12 19:16:40.399908
 
 """
 from alembic import op
@@ -11,7 +11,7 @@ import sqlalchemy_utils
 from sqlalchemy.dialects import mysql
 
 # revision identifiers, used by Alembic.
-revision = '4dd43a514f08'
+revision = 'bb786e9de8ea'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -31,7 +31,7 @@ def upgrade():
     )
     op.create_table('wallets',
     sa.Column('id', sa.String(length=26), nullable=False),
-    sa.Column('type', mysql.ENUM('Business', 'Safe'), nullable=False),
+    sa.Column('type', mysql.ENUM('Safe', 'Business', 'IPG', 'Commission', 'Settlement'), nullable=False),
     sa.Column('created_at', sa.DateTime(), server_default=sa.text('CURRENT_TIMESTAMP'), nullable=False),
     sa.Column('updated_at', sa.DateTime(), nullable=True),
     sa.Column('deleted_at', sa.DateTime(), nullable=True),
@@ -48,9 +48,10 @@ def upgrade():
     )
     op.create_table('transactions',
     sa.Column('id', sa.String(length=26), nullable=False),
-    sa.Column('type', mysql.ENUM('CashIn', 'CashOut', 'Payment', 'PaymentRefund', 'Commission', 'CommissionRefund', 'SafeBlock', 'SafeUnblock'), nullable=False),
+    sa.Column('type', mysql.ENUM('CashIn', 'CashOut', 'Payment', 'PaymentRefund', 'Commission', 'CommissionRefund', 'SafeUnblock'), nullable=False),
     sa.Column('amount', sa.INTEGER(), nullable=False),
     sa.Column('source_id', sa.String(length=26), nullable=False),
+    sa.Column('safe_id', sa.String(length=26), nullable=True),
     sa.Column('target_id', sa.String(length=26), nullable=False),
     sa.Column('receipt_id', sa.String(length=26), nullable=True),
     sa.Column('invoice_id', sa.String(length=26), nullable=False),
@@ -59,6 +60,7 @@ def upgrade():
     sa.Column('deleted_at', sa.DateTime(), nullable=True),
     sa.ForeignKeyConstraint(['invoice_id'], ['invoices.id'], ),
     sa.ForeignKeyConstraint(['receipt_id'], ['receipts.id'], ),
+    sa.ForeignKeyConstraint(['safe_id'], ['wallets.id'], ),
     sa.ForeignKeyConstraint(['source_id'], ['wallets.id'], ),
     sa.ForeignKeyConstraint(['target_id'], ['wallets.id'], ),
     sa.PrimaryKeyConstraint('id')

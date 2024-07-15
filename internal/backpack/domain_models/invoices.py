@@ -1,5 +1,5 @@
 from pydantic import BaseModel
 
 
-class WalletCreateResponse(BaseModel):
+class InvoiceCreateResponse(BaseModel):
     id: str

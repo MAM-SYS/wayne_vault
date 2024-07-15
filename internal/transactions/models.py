@@ -24,8 +24,11 @@ class Transaction(Base):
     source_id: Mapped[str] = mapped_column(ForeignKey("wallets.id"))
     source: Mapped["Wallet"] = relationship(foreign_keys=[source_id])
 
+    safe_id: Mapped[Optional[str]] = mapped_column(ForeignKey("wallets.id"))
+    safe: Mapped[Optional["Wallet"]] = relationship(foreign_keys=[safe_id])
+
     target_id: Mapped[str] = mapped_column(ForeignKey("wallets.id"))
-    target: Mapped["Wallet"] = relationship( foreign_keys=[target_id])
+    target: Mapped["Wallet"] = relationship(foreign_keys=[target_id])
 
     receipt_id: Mapped[Optional[str]] = mapped_column(ForeignKey("receipts.id"))
     receipt: Mapped[Optional["Receipt"]] = relationship(back_populates="transaction", single_parent=True)

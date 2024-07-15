@@ -1,4 +1,4 @@
-from sqlalchemy import select, update, func, case
+from sqlalchemy import select, update, func, case, or_
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from internal.backpack import WalletType
@@ -19,17 +19,3 @@ async def get_or_create_invoice_safe(invoice_id: str, session: AsyncSession) -> 
     return safe.id
 
 
-async def get_wallet(wallet_id: str, session: AsyncSession) -> Wallet:
-    await session.scalar(
-        select(
-            func.sum(
-                case(
-                    (
-                        (Transaction.source_id == wallet_id, Transaction.amount),
-                        (Transaction.target_id == wallet_id, -Transaction.amount),
-                    ), else_="0"
-
-                )
-            )
-        )
-    )
