@@ -16,6 +16,6 @@ async def create_invoice(session: AsyncSession = Depends(get_session)) -> Invoic
 
 
 @router.post("/{invoice_id}/transactions", status_code=status.HTTP_201_CREATED)
-async def add_transaction_to_invoice(invoice_id: str, transaction: TransactionCreateRequest, session:  AsyncSession = Depends(get_session)) -> InvoiceCreateResponse:
-    invoice: Invoice = await logic.add_transaction_to_invoice(invoice_id, transaction, session)
+async def add_transaction_to_invoice(invoice_id: str, payload: TransactionCreateRequest, session:  AsyncSession = Depends(get_session)) -> InvoiceCreateResponse:
+    invoice: Invoice = await logic.add_transaction_to_invoice(invoice_id, payload, session)
     return InvoiceCreateResponse(id=invoice.id)

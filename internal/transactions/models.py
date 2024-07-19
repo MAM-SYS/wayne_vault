@@ -21,14 +21,17 @@ class Transaction(Base):
     safe: Mapped[bool] = mapped_column(BOOLEAN, default=False)
     amount: Mapped[int] = mapped_column(INTEGER)
 
-    source_id: Mapped[str] = mapped_column(ForeignKey("wallets.id"))
-    source: Mapped["Wallet"] = relationship(foreign_keys=[source_id])
+    source_id: Mapped[Optional[str]] = mapped_column(ForeignKey("wallets.id"))
+    source: Mapped[Optional["Wallet"]] = relationship(foreign_keys=[source_id])
 
-    safe_id: Mapped[Optional[str]] = mapped_column(ForeignKey("wallets.id"))
-    safe: Mapped[Optional["Wallet"]] = relationship(foreign_keys=[safe_id])
+    safe_source_id: Mapped[Optional[str]] = mapped_column(ForeignKey("wallets.id"))
+    safe_source: Mapped[Optional["Wallet"]] = relationship(foreign_keys=[safe_source_id])
 
-    target_id: Mapped[str] = mapped_column(ForeignKey("wallets.id"))
-    target: Mapped["Wallet"] = relationship(foreign_keys=[target_id])
+    target_id: Mapped[Optional[str]] = mapped_column(ForeignKey("wallets.id"))
+    target: Mapped[Optional["Wallet"]] = relationship(foreign_keys=[target_id])
+
+    safe_target_id: Mapped[Optional[str]] = mapped_column(ForeignKey("wallets.id"))
+    safe_target: Mapped[Optional["Wallet"]] = relationship(foreign_keys=[safe_target_id])
 
     receipt_id: Mapped[Optional[str]] = mapped_column(ForeignKey("receipts.id"))
     receipt: Mapped[Optional["Receipt"]] = relationship(back_populates="transaction", single_parent=True)

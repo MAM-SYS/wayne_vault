@@ -2,9 +2,15 @@ from dataclasses import dataclass
 
 from pydantic import BaseModel
 
+from internal.backpack.enumerations.wallets import WalletType
+
+
+class WalletCreateRequest(BaseModel):
+    slug: str
+
 
 class WalletCreateResponse(BaseModel):
-    id: str
+    slug: str
 
 
 @dataclass(frozen=True)

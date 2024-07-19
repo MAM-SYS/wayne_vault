@@ -3,7 +3,7 @@ from __future__ import annotations
 from datetime import datetime
 from typing import Optional, List
 
-from sqlalchemy import String, func, ForeignKey
+from sqlalchemy import String, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from wayne_vault.db.base import Base
@@ -15,9 +15,6 @@ class Invoice(Base):
 
     id: Mapped[str] = mapped_column(String(26), primary_key=True, default=ulid_gen)
 
-    safe_id: Mapped[Optional[str]] = mapped_column(ForeignKey("wallets.id"))
-    safe: Mapped[Optional["Wallet"]] = relationship(back_populates="invoice", single_parent=True)
-
     transactions: Mapped[Optional[List["Transaction"]]] = relationship(back_populates="invoice")
 
     created_at: Mapped[datetime] = mapped_column(server_default=func.CURRENT_TIMESTAMP())
@@ -26,19 +23,3 @@ class Invoice(Base):
 
     def __repr__(self):
         return f"<Invoice {self.id}>"
-
-
-# class InvoiceItem(Base):
-#     __tablename__ = 'invoice_items'
-#
-#     id: Mapped[str] = mapped_column(String(26), primary_key=True, default=ulid_gen)
-#
-#     invoice_id: Mapped[str] = mapped_column(ForeignKey("invoices.id"))
-#     invoice: Mapped["Invoice"] = relationship(back_populates="items")
-#
-#     transaction_id: Mapped[str] = mapped_column(ForeignKey("transactions.id"))
-#     transaction: Mapped["Transaction"] = relationship(back_populates="invoice_item", single_parent=True)
-#
-#     def __repr__(self):
-#         return f"<InvoiceItem {self.id}>"
-#

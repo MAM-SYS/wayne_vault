@@ -1,6 +1,7 @@
-from internal.exceptions.apis import InvoiceNotFoundException, WalletNotFoundException
+from internal.exceptions.apis import InvoiceNotFoundException, WalletNotFoundException, WalletAlreadyExistsException
 
 __all__ = [
     "InvoiceNotFoundException",
-    "WalletNotFoundException"
+    "WalletNotFoundException",
+    "WalletAlreadyExistsException"
 ]

@@ -23,6 +23,8 @@ pydantic-settings = "^2.3.3"
 ulid-py = "^1.1.0"
 granian = "^1.4.4"
 
+[tool.poetry.dev-dependencies]
+mysql-connector-python = "^9.0.0"
 
 [build-system]
 requires = ["poetry-core"]
